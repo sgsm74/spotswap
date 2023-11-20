@@ -3,9 +3,9 @@ import 'package:spotswap/core/consts/config.dart';
 class ServerPaths {
   ServerPaths._();
   final String authorizationBaseUrl = 'https://accounts.spotify.com';
-  final String dataBaseUrl = 'https://api.spotify.com/v1';
-
+  static String baseUrl = 'https://api.spotify.com/v1';
   static String authorize = 'https://accounts.spotify.com/authorize';
+  static String authentication = 'https://accounts.spotify.com/api/token/';
 }
 
 class ImageAssets {
