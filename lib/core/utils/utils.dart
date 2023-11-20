@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
 
@@ -28,8 +29,8 @@ String calculateSHA256(String input) {
   return hashedString;
 }
 
-String base64encode(List<int> input) {
-  String base64String = base64Url.encode(input);
+String base64encode(Uint8List input) {
+  String base64String = base64UrlEncode(input);
 
   // Remove padding characters '='
   base64String = base64String.replaceAll('=', '');
