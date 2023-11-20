@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:spotswap/core/consts/consts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(const MyApp());
@@ -46,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Image.asset(
-                        'assets/images/spotify.png',
+                        ImageAssets.spotify,
                         height: 150,
                       ),
                       const SizedBox(
@@ -63,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         height: 64,
                       ),
                       const Text(
-                        'Swap your Spotify musics and playlists between your accounts easily.',
+                        'Swap your Spotify musics and playlists between your accounts easily',
                         textAlign: TextAlign.justify,
                         style: TextStyle(
                           fontSize: 16,
@@ -75,7 +77,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Flexible(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      launchUrl(
+                        Uri.parse(AuthorizeParameters.url),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff20D761),
                       minimumSize: const Size(
