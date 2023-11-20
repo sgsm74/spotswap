@@ -21,8 +21,6 @@ class NetworkDatasourceImpl implements NetworkDatasource {
         '${AuthorizeParameters.clientId}:${AuthorizeParameters.clientSecret}',
       );
       final base64Str = base64.encode(bytes);
-      print(base64Str);
-      print(code);
       final result = await http.postData(
         ServerPaths.authentication,
         data: {
