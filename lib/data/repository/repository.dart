@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:spotswap/core/errors/errors.dart';
+import 'package:spotswap/core/errors/exceptions.dart';
 import 'package:spotswap/core/services/connection_checker.dart';
 import 'package:spotswap/data/datasource/network_datasource.dart';
 import 'package:spotswap/domain/entities/token_entity.dart';
@@ -14,8 +15,16 @@ class RepositoryImpl implements Repository {
   final NetworkDatasource networkDatasource;
   final NetworkInfo networkInfo;
   @override
-  Future<Either<Failure, Token>> authentication() {
-    // TODO: implement authentication
-    throw UnimplementedError();
+  Future<Either<Failure, Token>> authentication(String code) async {
+    try {
+      if (await networkInfo.hasConnection!) {
+        final result = await networkDatasource.authentication(code);
+        return Right(result);
+      } else {
+        return const Left(NetworkFailure(message: 'No Internet'));
+      }
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    }
   }
 }
