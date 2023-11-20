@@ -18,9 +18,11 @@ class NetworkDatasourceImpl implements NetworkDatasource {
   Future<TokenModel> authentication(String code) async {
     try {
       final bytes = utf8.encode(
-        '${AuthorizeParameters.clientId}:+${AuthorizeParameters.clientSecret}',
+        '${AuthorizeParameters.clientId}:${AuthorizeParameters.clientSecret}',
       );
       final base64Str = base64.encode(bytes);
+      print(base64Str);
+      print(code);
       final result = await http.postData(
         ServerPaths.authentication,
         data: {
