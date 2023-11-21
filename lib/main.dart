@@ -1,5 +1,3 @@
-// ignore_for_file: unused_import
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotswap/core/consts/consts.dart';
@@ -55,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> initUniLinks() async {
     try {
       initialLink = await getInitialLink() ?? '';
-    } catch (e) {}
+    } catch (_) {}
 
     if (initialLink.isNotEmpty) {
       _handleDeepLink(initialLink);
@@ -83,9 +81,15 @@ class _MyHomePageState extends State<MyHomePage> {
           child: BlocConsumer<SpotSwapBloc, SpotSwapState>(
             listener: (context, state) {
               if (state is AuthenticationSuccessfulState) {
+                BlocProvider.of<SpotSwapBloc>(context).add(GetProfileEvent());
+              } else if (state is GetProfileSuccessfulState) {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const HomePage()),
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(
+                      profile: state.profile,
+                    ),
+                  ),
                 );
               }
             },

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:spotswap/domain/entities/profile_entity.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
+  const HomePage({
+    super.key,
+    required this.profile,
+  });
+  final Profile profile;
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -17,27 +21,33 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Wrap(
+              Wrap(
                 children: [
-                  Text(
+                  const Text(
                     'Name: ',
                     style: TextStyle(fontSize: 18),
                   ),
                   Text(
-                    'Saeed',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    widget.profile.name,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
-              const Wrap(
+              Wrap(
                 children: [
-                  Text(
+                  const Text(
                     'Account: ',
                     style: TextStyle(fontSize: 18),
                   ),
                   Text(
-                    'djhsfjAdfsdhfjsdfksdnf',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    widget.profile.id,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),

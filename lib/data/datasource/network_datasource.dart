@@ -4,10 +4,15 @@ import 'package:dio/dio.dart';
 import 'package:spotswap/core/consts/consts.dart';
 import 'package:spotswap/core/errors/exceptions.dart';
 import 'package:spotswap/core/services/http_service.dart';
+import 'package:spotswap/data/models/profile_model.dart';
 import 'package:spotswap/data/models/token_model.dart';
+import 'package:spotswap/domain/entities/profile_entity.dart';
+import 'package:spotswap/domain/entities/token_entity.dart';
 
 abstract class NetworkDatasource {
+  Future<void> setToken(Token token);
   Future<TokenModel> authentication(String code);
+  Future<Profile> getProfile();
 }
 
 class NetworkDatasourceImpl implements NetworkDatasource {
@@ -33,9 +38,28 @@ class NetworkDatasourceImpl implements NetworkDatasource {
           Headers.contentTypeHeader: 'application/x-www-form-urlencoded',
         },
       );
+      print(result.data['access_token']);
       return TokenModel.fromJson(result.data);
     } on DioException catch (e) {
       throw ServerException(message: e.message ?? '');
     }
   }
+
+  @override
+  Future<ProfileModel> getProfile() async {
+    try {
+      final result = await http.getData(
+        ServerPaths.profile,
+        header: {
+          'Authorization': http.getToken(),
+        },
+      );
+      return ProfileModel.fromJson(result.data);
+    } on DioException catch (e) {
+      throw ServerException(message: e.message ?? '');
+    }
+  }
+
+  @override
+  Future<void> setToken(Token token) async => http.setToken(token.accessToken);
 }

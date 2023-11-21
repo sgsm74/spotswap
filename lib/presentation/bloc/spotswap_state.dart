@@ -26,3 +26,11 @@ final class AuthenticationSuccessfulState extends SpotSwapState {
   @override
   List<Object> get props => [token];
 }
+
+final class GetProfileSuccessfulState extends SpotSwapState {
+  const GetProfileSuccessfulState({required this.profile});
+  final Profile profile;
+
+  @override
+  List<Object> get props => [profile];
+}

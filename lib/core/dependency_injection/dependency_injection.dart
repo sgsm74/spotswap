@@ -8,6 +8,7 @@ import 'package:spotswap/data/datasource/network_datasource.dart';
 import 'package:spotswap/data/repository/repository.dart';
 import 'package:spotswap/domain/repository/repository.dart';
 import 'package:spotswap/domain/usecases/authentication_usecase.dart';
+import 'package:spotswap/domain/usecases/get_profile_usecase.dart';
 import 'package:spotswap/presentation/bloc/spotswap_bloc.dart';
 
 final sl = GetIt.instance;
@@ -49,6 +50,14 @@ Future<void> init() async {
   sl.registerLazySingleton(
     () => AuthenticationUseCase(repository: sl()),
   );
+  sl.registerLazySingleton(
+    () => GetProfileUseCase(repository: sl()),
+  );
   //bloc
-  sl.registerLazySingleton(() => SpotSwapBloc(authenticationUseCase: sl()));
+  sl.registerLazySingleton(
+    () => SpotSwapBloc(
+      authenticationUseCase: sl(),
+      getProfileUseCase: sl(),
+    ),
+  );
 }

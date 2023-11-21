@@ -6,6 +6,7 @@ class ServerPaths {
   static String baseUrl = 'https://api.spotify.com/v1';
   static String authorize = 'https://accounts.spotify.com/authorize';
   static String authentication = 'https://accounts.spotify.com/api/token/';
+  static String profile = '/me';
 }
 
 class ImageAssets {

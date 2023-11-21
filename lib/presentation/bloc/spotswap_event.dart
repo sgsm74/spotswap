@@ -14,3 +14,5 @@ class AuthenticationEvent extends SpotSwapEvent {
   @override
   List<Object> get props => [code];
 }
+
+class GetProfileEvent extends SpotSwapEvent {}

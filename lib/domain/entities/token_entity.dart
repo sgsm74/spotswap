@@ -7,7 +7,6 @@ class Token extends Equatable {
     required this.tokenType,
     required this.expiresIn,
   });
-
   final String accessToken;
   final String refreshToken;
   final String tokenType;
