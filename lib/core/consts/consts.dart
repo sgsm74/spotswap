@@ -18,7 +18,8 @@ class AuthorizeParameters {
   static String responseType = 'code';
   static String clientId = ApiKeys.clientId;
   static String clientSecret = ApiKeys.clientSecret;
-  static String scope = 'user-read-private user-read-email';
+  static String scope =
+      'user-read-private user-read-email playlist-read playlist-read-private playlist-modify-public playlist-modify-private user-library-read';
   static String redirecUrl = ApiKeys.redirectUrl;
   static String state = 'spotify_auth_state';
   static String url =
