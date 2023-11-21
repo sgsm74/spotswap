@@ -16,3 +16,11 @@ class AuthenticationEvent extends SpotSwapEvent {
 }
 
 class GetProfileEvent extends SpotSwapEvent {}
+
+class GetUserPlayListsEvent extends SpotSwapEvent {
+  const GetUserPlayListsEvent({required this.userId});
+  final String userId;
+
+  @override
+  List<Object> get props => [userId];
+}

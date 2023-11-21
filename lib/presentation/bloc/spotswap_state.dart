@@ -34,3 +34,11 @@ final class GetProfileSuccessfulState extends SpotSwapState {
   @override
   List<Object> get props => [profile];
 }
+
+class GetUserPlayListsSuccessfulState extends SpotSwapState {
+  const GetUserPlayListsSuccessfulState({required this.playLists});
+  final List<PlayList> playLists;
+
+  @override
+  List<Object> get props => [playLists];
+}

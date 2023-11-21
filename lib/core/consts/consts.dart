@@ -7,6 +7,8 @@ class ServerPaths {
   static String authorize = 'https://accounts.spotify.com/authorize';
   static String authentication = 'https://accounts.spotify.com/api/token/';
   static String profile = '/me';
+  static String getUserPlaylists(String userId) => '/users/$userId/playlists';
+  static String userTracks = '/me/tracks';
 }
 
 class ImageAssets {
@@ -24,5 +26,5 @@ class AuthorizeParameters {
   static String redirecUrl = ApiKeys.redirectUrl;
   static String state = 'spotify_auth_state';
   static String url =
-      '${ServerPaths.authorize}?response_type=$responseType&client_id=$clientId&redirect_uri=$redirecUrl&state=$state';
+      '${ServerPaths.authorize}?response_type=$responseType&client_id=$clientId&redirect_uri=$redirecUrl&state=$state&show_dialog=true';
 }
