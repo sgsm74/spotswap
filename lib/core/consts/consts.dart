@@ -22,9 +22,9 @@ class AuthorizeParameters {
   static String clientId = ApiKeys.clientId;
   static String clientSecret = ApiKeys.clientSecret;
   static String scope =
-      'user-read-private user-read-email playlist-read playlist-read-private playlist-modify-public playlist-modify-private user-library-read';
+      'playlist-read playlist-read-private playlist-modify-public playlist-modify-private user-library-read user-library-modify';
   static String redirecUrl = ApiKeys.redirectUrl;
   static String state = 'spotify_auth_state';
   static String url =
-      '${ServerPaths.authorize}?response_type=$responseType&client_id=$clientId&redirect_uri=$redirecUrl&state=$state&show_dialog=true';
+      '${ServerPaths.authorize}?response_type=$responseType&client_id=$clientId&redirect_uri=$redirecUrl&scope=$scope&state=$state&show_dialog=true';
 }
