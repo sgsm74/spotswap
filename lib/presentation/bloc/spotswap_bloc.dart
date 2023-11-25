@@ -88,7 +88,6 @@ class SpotSwapBloc extends Bloc<SpotSwapEvent, SpotSwapState> {
   ) async {
     emit(SpotSwapLoadingState());
     final result = await getMyTracksUseCase(NoParams());
-    print(result.isRight());
     emit(
       result.fold(
         (error) => SpotSwapErrorState(message: error.message),
