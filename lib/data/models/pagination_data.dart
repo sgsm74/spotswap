@@ -1,4 +1,6 @@
-class PaginationDataModel<T> {
+import 'package:equatable/equatable.dart';
+
+class PaginationDataModel<T> extends Equatable {
   const PaginationDataModel({
     required this.items,
     required this.limit,
@@ -13,7 +15,7 @@ class PaginationDataModel<T> {
     T Function(dynamic) fromJson,
   ) {
     List<T> items = [];
-    for (var item in json['items']) {
+    for (final item in json['items']) {
       items.add(fromJson(item));
     }
     return PaginationDataModel(
@@ -32,4 +34,7 @@ class PaginationDataModel<T> {
   final int total;
   final String? next;
   final String? previous;
+
+  @override
+  List<Object> get props => [items];
 }
