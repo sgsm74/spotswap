@@ -19,15 +19,15 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'SpotSwap',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff20D761)),
-        useMaterial3: true,
-      ),
-      home: BlocProvider(
-        create: (context) => sl<SpotSwapBloc>(),
-        child: const MyHomePage(),
+    return BlocProvider(
+      create: (context) => sl<SpotSwapBloc>(),
+      child: MaterialApp(
+        title: 'SpotSwap',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff20D761)),
+          useMaterial3: true,
+        ),
+        home: const MyHomePage(),
       ),
     );
   }
