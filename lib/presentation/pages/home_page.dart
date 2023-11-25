@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotswap/core/dependency_injection/dependency_injection.dart';
 import 'package:spotswap/domain/entities/profile_entity.dart';
+import 'package:spotswap/domain/entities/track_entity.dart';
 import 'package:spotswap/presentation/bloc/spotswap_bloc.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,18 +16,29 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<Track> tracks = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: BlocProvider(
-          create: (context) => sl<SpotSwapBloc>()
-            ..add(GetUserPlayListsEvent(userId: widget.profile.id)),
+          create: (context) => sl<SpotSwapBloc>()..add(GetMyTracksEvent()),
           child: BlocConsumer<SpotSwapBloc, SpotSwapState>(
             listener: (context, state) {
-              // TODO: implement listener
+              print('state $state');
+              if (state is GetMyTracksSuccessfulState) {
+                tracks = state.tracks;
+              }
             },
             builder: (context, state) {
+              print(state);
+              if (state is SpotSwapLoadingState) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: Color(0xff20D761),
+                  ),
+                );
+              }
               return Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 32, vertical: 32),
@@ -66,33 +78,33 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(
                       height: 32,
                     ),
-                    const Wrap(
+                    // const Wrap(
+                    //   spacing: 4,
+                    //   children: [
+                    //     Text(
+                    //       '20',
+                    //       style: TextStyle(
+                    //         fontSize: 18,
+                    //         fontWeight: FontWeight.bold,
+                    //       ),
+                    //     ),
+                    //     Text(
+                    //       'Playlists',
+                    //       style: TextStyle(fontSize: 18),
+                    //     ),
+                    //   ],
+                    // ),
+                    Wrap(
                       spacing: 4,
                       children: [
                         Text(
-                          '20',
-                          style: TextStyle(
+                          '${tracks.length}',
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text(
-                          'Playlists',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-                    const Wrap(
-                      spacing: 4,
-                      children: [
-                        Text(
-                          '100',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
+                        const Text(
                           'Tracks',
                           style: TextStyle(fontSize: 18),
                         ),

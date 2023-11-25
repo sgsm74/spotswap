@@ -4,9 +4,11 @@ import 'package:dio/dio.dart';
 import 'package:spotswap/core/consts/consts.dart';
 import 'package:spotswap/core/errors/exceptions.dart';
 import 'package:spotswap/core/services/http_service.dart';
+import 'package:spotswap/data/models/pagination_data.dart';
 import 'package:spotswap/data/models/playlist_model.dart';
 import 'package:spotswap/data/models/profile_model.dart';
 import 'package:spotswap/data/models/token_model.dart';
+import 'package:spotswap/data/models/track_model.dart';
 import 'package:spotswap/domain/entities/playlist_entity.dart';
 import 'package:spotswap/domain/entities/profile_entity.dart';
 import 'package:spotswap/domain/entities/token_entity.dart';
@@ -16,6 +18,8 @@ abstract class NetworkDatasource {
   Future<Token> authentication(String code);
   Future<Profile> getProfile();
   Future<List<PlayList>> getUserPlaylists(String userId);
+  Future<PaginationDataModel> getMyTracks(int limit, int offset);
+  Future<void> updateUserTracks(List<String> trackIds);
 }
 
 class NetworkDatasourceImpl implements NetworkDatasource {
@@ -81,6 +85,45 @@ class NetworkDatasourceImpl implements NetworkDatasource {
         playLists.add(PlayListModel.fromJson(playList));
       }
       return playLists;
+    } on DioException catch (e) {
+      throw ServerException(message: e.message ?? '');
+    }
+  }
+
+  @override
+  Future<PaginationDataModel> getMyTracks(int limit, int offset) async {
+    try {
+      final result = await http.getData(
+        ServerPaths.userTracks,
+        queryParameters: {
+          'offset': offset,
+          'limit': limit,
+          'locale': 'en-US,en;q=0.9',
+        },
+        header: {
+          'Authorization': http.getToken(),
+        },
+      );
+      return PaginationDataModel<TrackModel>.fromJson(result.data, (e) {
+        return TrackModel.fromJson(e);
+      });
+    } on DioException catch (e) {
+      throw ServerException(message: e.message ?? '');
+    }
+  }
+
+  @override
+  Future<void> updateUserTracks(List<String> trackIds) async {
+    try {
+      await http.postData(
+        ServerPaths.userTracks,
+        data: {
+          'ids': trackIds,
+        },
+        header: {
+          'Authorization': http.getToken(),
+        },
+      );
     } on DioException catch (e) {
       throw ServerException(message: e.message ?? '');
     }

@@ -6,8 +6,12 @@ class TrackModel extends Track {
     required super.uri,
   });
 
-  factory TrackModel.fromJson(Map<String, dynamic> json) =>
-      TrackModel(id: json['id'], uri: json['uri']);
+  factory TrackModel.fromJson(Map<String, dynamic> json) {
+    return TrackModel(
+      id: json['track']['id'],
+      uri: json['track']['uri'],
+    );
+  }
 
   toJson() => {'id': id, 'uri': uri};
 }
