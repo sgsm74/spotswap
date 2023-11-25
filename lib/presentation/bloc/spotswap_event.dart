@@ -24,3 +24,5 @@ class GetUserPlayListsEvent extends SpotSwapEvent {
   @override
   List<Object> get props => [userId];
 }
+
+class GetMyTracksEvent extends SpotSwapEvent {}

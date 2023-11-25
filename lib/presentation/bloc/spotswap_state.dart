@@ -42,3 +42,11 @@ class GetUserPlayListsSuccessfulState extends SpotSwapState {
   @override
   List<Object> get props => [playLists];
 }
+
+class GetMyTracksSuccessfulState extends SpotSwapState {
+  const GetMyTracksSuccessfulState({required this.tracks});
+  final List<Track> tracks;
+
+  @override
+  List<Object> get props => [tracks];
+}
