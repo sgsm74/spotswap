@@ -4,6 +4,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:spotswap/core/consts/consts.dart';
 import 'package:spotswap/core/services/connection_checker.dart';
 import 'package:spotswap/core/services/http_service.dart';
+import 'package:spotswap/data/datasource/local_datasource.dart';
 import 'package:spotswap/data/datasource/network_datasource.dart';
 import 'package:spotswap/data/repository/repository.dart';
 import 'package:spotswap/domain/repository/repository.dart';
@@ -41,10 +42,14 @@ Future<void> init() async {
       http: sl(),
     ),
   );
+  sl.registerLazySingleton<LocalDatasource>(
+    () => LocalDatasourceImpl(),
+  );
   //repository
   sl.registerLazySingleton<Repository>(
     () => RepositoryImpl(
       networkDatasource: sl(),
+      localDatasource: sl(),
       networkInfo: sl(),
     ),
   );
