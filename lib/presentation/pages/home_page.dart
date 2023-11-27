@@ -124,10 +124,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () {
-                              BlocProvider.of<SpotSwapBloc>(context)
-                                  .add(GetMyTracksEvent());
-                            },
+                            onPressed: () {},
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xff20D761),
                             ),
