@@ -50,3 +50,5 @@ class GetMyTracksSuccessfulState extends SpotSwapState {
   @override
   List<Object> get props => [tracks];
 }
+
+class ExportMyTracksSuccessfulState extends SpotSwapState {}

@@ -26,3 +26,15 @@ class GetUserPlayListsEvent extends SpotSwapEvent {
 }
 
 class GetMyTracksEvent extends SpotSwapEvent {}
+
+class ExportMyTracksEvent extends SpotSwapEvent {
+  const ExportMyTracksEvent({
+    required this.tracks,
+    required this.account,
+  });
+  final List<Track> tracks;
+  final String account;
+
+  @override
+  List<Object> get props => [account, tracks];
+}

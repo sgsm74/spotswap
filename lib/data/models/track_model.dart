@@ -12,6 +12,12 @@ class TrackModel extends Track {
       uri: json['track']['uri'],
     );
   }
+  factory TrackModel.fromEntity(Track track) {
+    return TrackModel(
+      id: track.id,
+      uri: track.uri,
+    );
+  }
 
   toJson() => {'id': id, 'uri': uri};
 }

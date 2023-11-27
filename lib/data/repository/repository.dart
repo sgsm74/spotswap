@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:spotswap/core/errors/errors.dart';
 import 'package:spotswap/core/errors/exceptions.dart';
 import 'package:spotswap/core/services/connection_checker.dart';
+import 'package:spotswap/data/datasource/local_datasource.dart';
 import 'package:spotswap/data/datasource/network_datasource.dart';
 import 'package:spotswap/domain/entities/playlist_entity.dart';
 import 'package:spotswap/domain/entities/profile_entity.dart';
@@ -12,10 +13,12 @@ import 'package:spotswap/domain/repository/repository.dart';
 class RepositoryImpl implements Repository {
   const RepositoryImpl({
     required this.networkDatasource,
+    required this.localDatasource,
     required this.networkInfo,
   });
 
   final NetworkDatasource networkDatasource;
+  final LocalDatasource localDatasource;
   final NetworkInfo networkInfo;
   @override
   Future<Either<Failure, Token>> authentication(String code) async {
@@ -83,6 +86,19 @@ class RepositoryImpl implements Repository {
       }
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> exportMyTracks(
+    List<Track> tracks,
+    String account,
+  ) async {
+    try {
+      await localDatasource.saveMyTracks(tracks, account);
+      return const Right(unit);
+    } catch (e) {
+      return const Left(DbFailure(message: 'sd'));
     }
   }
 }

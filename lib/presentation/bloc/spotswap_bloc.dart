@@ -8,6 +8,7 @@ import 'package:spotswap/domain/entities/profile_entity.dart';
 import 'package:spotswap/domain/entities/token_entity.dart';
 import 'package:spotswap/domain/entities/track_entity.dart';
 import 'package:spotswap/domain/usecases/authentication_usecase.dart';
+import 'package:spotswap/domain/usecases/export_tracks_usecase.dart';
 import 'package:spotswap/domain/usecases/get_my_tracks_usecase.dart';
 import 'package:spotswap/domain/usecases/get_profile_usecase.dart';
 import 'package:spotswap/domain/usecases/get_user_playlists_usecase.dart';
@@ -21,6 +22,7 @@ class SpotSwapBloc extends Bloc<SpotSwapEvent, SpotSwapState> {
     required this.getProfileUseCase,
     required this.getUserPlayListsUseCase,
     required this.getMyTracksUseCase,
+    required this.exportTracksUseCase,
   }) : super(SpotSwapInitialState()) {
     on<SpotSwapEvent>((event, emit) async {
       if (event is AuthenticationEvent) {
@@ -31,6 +33,8 @@ class SpotSwapBloc extends Bloc<SpotSwapEvent, SpotSwapState> {
         await _onGetUserPlayListsEvent(event, emit);
       } else if (event is GetMyTracksEvent) {
         await _onGetMyTracksEvent(event, emit);
+      } else if (event is ExportMyTracksEvent) {
+        await _onExportMyTracksEvent(event, emit);
       }
     });
   }
@@ -38,7 +42,7 @@ class SpotSwapBloc extends Bloc<SpotSwapEvent, SpotSwapState> {
   final GetProfileUseCase getProfileUseCase;
   final GetUserPlayListsUseCase getUserPlayListsUseCase;
   final GetMyTracksUseCase getMyTracksUseCase;
-
+  final ExportTracksUseCase exportTracksUseCase;
   FutureOr<void> _onAuthenticationEvent(
     AuthenticationEvent event,
     Emitter<SpotSwapState> emit,
@@ -92,6 +96,22 @@ class SpotSwapBloc extends Bloc<SpotSwapEvent, SpotSwapState> {
       result.fold(
         (error) => SpotSwapErrorState(message: error.message),
         (tracks) => GetMyTracksSuccessfulState(tracks: tracks),
+      ),
+    );
+  }
+
+  FutureOr<void> _onExportMyTracksEvent(
+    ExportMyTracksEvent event,
+    Emitter<SpotSwapState> emit,
+  ) async {
+    emit(SpotSwapLoadingState());
+    final result = await exportTracksUseCase(
+      ExportTracksParams(tracks: event.tracks, account: event.account),
+    );
+    emit(
+      result.fold(
+        (error) => SpotSwapErrorState(message: error.message),
+        (ok) => ExportMyTracksSuccessfulState(),
       ),
     );
   }

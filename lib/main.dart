@@ -128,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             height: 64,
                           ),
                           const Text(
-                            'Swap your Spotify musics and playlists between your accounts easily.',
+                            'Swap your Spotify liked musics between your accounts easily.',
                             textAlign: TextAlign.justify,
                             style: TextStyle(
                               fontSize: 18,

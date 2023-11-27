@@ -10,4 +10,8 @@ abstract class Repository {
   Future<Either<Failure, Profile>> getProfile();
   Future<Either<Failure, List<PlayList>>> getUserPlaylists(String userId);
   Future<Either<Failure, List<Track>>> getMyTracks();
+  Future<Either<Failure, void>> exportMyTracks(
+    List<Track> tracks,
+    String account,
+  );
 }
