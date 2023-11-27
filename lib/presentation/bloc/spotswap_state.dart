@@ -9,7 +9,13 @@ sealed class SpotSwapState extends Equatable {
 
 final class SpotSwapInitialState extends SpotSwapState {}
 
-final class SpotSwapLoadingState extends SpotSwapState {}
+final class SpotSwapLoadingState extends SpotSwapState {
+  const SpotSwapLoadingState({required this.event});
+  final SpotSwapEvent event;
+
+  @override
+  List<Object> get props => [event];
+}
 
 final class SpotSwapErrorState extends SpotSwapState {
   const SpotSwapErrorState({required this.message});

@@ -47,7 +47,7 @@ class SpotSwapBloc extends Bloc<SpotSwapEvent, SpotSwapState> {
     AuthenticationEvent event,
     Emitter<SpotSwapState> emit,
   ) async {
-    emit(SpotSwapLoadingState());
+    emit(SpotSwapLoadingState(event: event));
     final result =
         await authenticationUseCase(AuthenticationParams(code: event.code));
     emit(
@@ -62,7 +62,7 @@ class SpotSwapBloc extends Bloc<SpotSwapEvent, SpotSwapState> {
     GetProfileEvent event,
     Emitter<SpotSwapState> emit,
   ) async {
-    emit(SpotSwapLoadingState());
+    emit(SpotSwapLoadingState(event: event));
     final result = await getProfileUseCase(NoParams());
     emit(
       result.fold(
@@ -76,7 +76,7 @@ class SpotSwapBloc extends Bloc<SpotSwapEvent, SpotSwapState> {
     GetUserPlayListsEvent event,
     Emitter<SpotSwapState> emit,
   ) async {
-    emit(SpotSwapLoadingState());
+    emit(SpotSwapLoadingState(event: event));
     final result = await getUserPlayListsUseCase(event.userId);
     emit(
       result.fold(
@@ -90,7 +90,7 @@ class SpotSwapBloc extends Bloc<SpotSwapEvent, SpotSwapState> {
     GetMyTracksEvent event,
     Emitter<SpotSwapState> emit,
   ) async {
-    emit(SpotSwapLoadingState());
+    emit(SpotSwapLoadingState(event: event));
     final result = await getMyTracksUseCase(NoParams());
     emit(
       result.fold(
@@ -104,7 +104,7 @@ class SpotSwapBloc extends Bloc<SpotSwapEvent, SpotSwapState> {
     ExportMyTracksEvent event,
     Emitter<SpotSwapState> emit,
   ) async {
-    emit(SpotSwapLoadingState());
+    emit(SpotSwapLoadingState(event: event));
     final result = await exportTracksUseCase(
       ExportTracksParams(tracks: event.tracks, account: event.account),
     );
