@@ -1,12 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:spotswap/core/consts/consts.dart';
 import 'package:spotswap/core/services/connection_checker.dart';
 import 'package:spotswap/core/services/http_service.dart';
 import 'package:spotswap/data/datasource/local_datasource.dart';
 import 'package:spotswap/data/datasource/network_datasource.dart';
 import 'package:spotswap/data/repository/repository.dart';
+import 'package:spotswap/domain/entities/track_entity.dart';
 import 'package:spotswap/domain/repository/repository.dart';
 import 'package:spotswap/domain/usecases/authentication_usecase.dart';
 import 'package:spotswap/domain/usecases/export_tracks_usecase.dart';
@@ -17,6 +20,9 @@ import 'package:spotswap/presentation/bloc/spotswap_bloc.dart';
 
 final sl = GetIt.instance;
 Future<void> init() async {
+  final directory = await getApplicationDocumentsDirectory();
+  Hive.init(directory.path);
+  Hive.registerAdapter(TrackAdapter()); //1
   //http service
   sl.registerLazySingleton<HTTPService>(
     () => DioService(

@@ -28,8 +28,14 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: BlocConsumer<SpotSwapBloc, SpotSwapState>(
           listener: (context, state) {
+            print(state);
             if (state is GetMyTracksSuccessfulState) {
               tracks = state.tracks;
+            } else if (state is ExportMyTracksSuccessfulState) {
+              showAdaptiveDialog(
+                context: context,
+                builder: (context) => const AlertDialog.adaptive(),
+              );
             }
           },
           builder: (context, state) {
@@ -145,7 +151,14 @@ class _HomePageState extends State<HomePage> {
                           ),
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                BlocProvider.of<SpotSwapBloc>(context).add(
+                                  ExportMyTracksEvent(
+                                    tracks: tracks,
+                                    account: widget.profile.id,
+                                  ),
+                                );
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xff20D761),
                               ),
