@@ -48,3 +48,11 @@ class LoadMyTracksEvent extends SpotSwapEvent {
   @override
   List<Object> get props => [account];
 }
+
+class ImportTracksEvent extends SpotSwapEvent {
+  const ImportTracksEvent({required this.tracks});
+  final List<Track> tracks;
+
+  @override
+  List<Object> get props => [tracks];
+}

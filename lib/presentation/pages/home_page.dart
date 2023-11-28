@@ -123,59 +123,61 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: WrapCrossAlignment.center,
                     spacing: 4,
                     children: [
-                      Visibility(
-                        visible: state is SpotSwapLoadingState &&
-                            state.event is GetMyTracksEvent,
-                        replacement: Text(
-                          '${tracks.length}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        child: const SizedBox(
-                          width: 10,
-                          height: 10,
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              color: Color(0xff20D761),
-                            ),
-                          ),
+                      Text(
+                        '${tracks.length}',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       const Text(
-                        'Tracks',
+                        'My tracks',
                         style: TextStyle(fontSize: 18),
                       ),
                     ],
                   ),
                   const SizedBox(
-                    height: 128,
+                    height: 16,
+                  ),
+                  Visibility(
+                    visible: loadedTracks.isNotEmpty,
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 4,
+                      children: [
+                        Text(
+                          '${loadedTracks.length}',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const Text(
+                          'Tracks ready to import',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 64,
+                  ),
+                  Visibility(
+                    visible: state is SpotSwapLoadingState,
+                    child: const Center(
+                      child: CircularProgressIndicator.adaptive(
+                        backgroundColor: Color(0xff20D761),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 64,
                   ),
                   Visibility(
                     visible: state is GetMyTracksSuccessfulState,
                     child: Flexible(
                       child: Row(
                         children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xff20D761),
-                              ),
-                              child: const Text(
-                                'Import',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 16,
-                          ),
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
@@ -191,6 +193,25 @@ class _HomePageState extends State<HomePage> {
                               ),
                               child: const Text(
                                 'Export',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 16,
+                          ),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xff20D761),
+                              ),
+                              child: const Text(
+                                'Import',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w700,

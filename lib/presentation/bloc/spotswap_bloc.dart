@@ -12,6 +12,7 @@ import 'package:spotswap/domain/usecases/export_tracks_usecase.dart';
 import 'package:spotswap/domain/usecases/get_my_tracks_usecase.dart';
 import 'package:spotswap/domain/usecases/get_profile_usecase.dart';
 import 'package:spotswap/domain/usecases/get_user_playlists_usecase.dart';
+import 'package:spotswap/domain/usecases/import_tracks_usecase.dart';
 import 'package:spotswap/domain/usecases/load_my_tracks_usecase.dart';
 
 part 'spotswap_event.dart';
@@ -25,6 +26,7 @@ class SpotSwapBloc extends Bloc<SpotSwapEvent, SpotSwapState> {
     required this.getMyTracksUseCase,
     required this.exportTracksUseCase,
     required this.loadMyTracksUseCase,
+    required this.importTracksUseCase,
   }) : super(SpotSwapInitialState()) {
     on<SpotSwapEvent>((event, emit) async {
       if (event is AuthenticationEvent) {
@@ -39,6 +41,8 @@ class SpotSwapBloc extends Bloc<SpotSwapEvent, SpotSwapState> {
         await _onExportMyTracksEvent(event, emit);
       } else if (event is LoadMyTracksEvent) {
         await _onLoadMyTracksEvent(event, emit);
+      } else if (event is ImportTracksEvent) {
+        await _onImportTracksEvent(event, emit);
       }
     });
   }
@@ -48,6 +52,8 @@ class SpotSwapBloc extends Bloc<SpotSwapEvent, SpotSwapState> {
   final GetMyTracksUseCase getMyTracksUseCase;
   final ExportTracksUseCase exportTracksUseCase;
   final LoadMyTracksUseCase loadMyTracksUseCase;
+  final ImportTracksUseCase importTracksUseCase;
+
   FutureOr<void> _onAuthenticationEvent(
     AuthenticationEvent event,
     Emitter<SpotSwapState> emit,
@@ -133,6 +139,20 @@ class SpotSwapBloc extends Bloc<SpotSwapEvent, SpotSwapState> {
       result.fold(
         (error) => SpotSwapErrorState(message: error.message),
         (tracks) => LoadMyTracksSuccessfulState(tracks: tracks),
+      ),
+    );
+  }
+
+  FutureOr<void> _onImportTracksEvent(
+    ImportTracksEvent event,
+    Emitter<SpotSwapState> emit,
+  ) async {
+    emit(SpotSwapLoadingState(event: event));
+    final result = await importTracksUseCase(event.tracks);
+    emit(
+      result.fold(
+        (error) => SpotSwapErrorState(message: error.message),
+        (ok) => ImportTracksSuccessfulState(),
       ),
     );
   }

@@ -20,6 +20,7 @@ abstract class NetworkDatasource {
   Future<List<PlayList>> getUserPlaylists(String userId);
   Future<PaginationDataModel> getMyTracks(int limit, int offset);
   Future<void> updateUserTracks(List<String> trackIds);
+  Future<void> importTracks(List<String> trackIds);
 }
 
 class NetworkDatasourceImpl implements NetworkDatasource {
@@ -114,6 +115,23 @@ class NetworkDatasourceImpl implements NetworkDatasource {
 
   @override
   Future<void> updateUserTracks(List<String> trackIds) async {
+    try {
+      await http.postData(
+        ServerPaths.userTracks,
+        data: {
+          'ids': trackIds,
+        },
+        header: {
+          'Authorization': http.getToken(),
+        },
+      );
+    } on DioException catch (e) {
+      throw ServerException(message: e.message ?? '');
+    }
+  }
+
+  @override
+  Future<void> importTracks(List<String> trackIds) async {
     try {
       await http.postData(
         ServerPaths.userTracks,

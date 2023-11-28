@@ -112,4 +112,18 @@ class RepositoryImpl implements Repository {
       return const Left(DbFailure(message: 'Hive Exception'));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> importTracks(List<Track> tracks) async {
+    try {
+      List<String> trackIds = [];
+      for (var track in tracks) {
+        trackIds.add(track.id);
+      }
+      await networkDatasource.importTracks(trackIds);
+      return const Right(unit);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    }
+  }
 }

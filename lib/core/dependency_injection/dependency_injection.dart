@@ -16,6 +16,7 @@ import 'package:spotswap/domain/usecases/export_tracks_usecase.dart';
 import 'package:spotswap/domain/usecases/get_my_tracks_usecase.dart';
 import 'package:spotswap/domain/usecases/get_profile_usecase.dart';
 import 'package:spotswap/domain/usecases/get_user_playlists_usecase.dart';
+import 'package:spotswap/domain/usecases/import_tracks_usecase.dart';
 import 'package:spotswap/domain/usecases/load_my_tracks_usecase.dart';
 import 'package:spotswap/presentation/bloc/spotswap_bloc.dart';
 
@@ -80,6 +81,9 @@ Future<void> init() async {
   sl.registerLazySingleton(
     () => LoadMyTracksUseCase(repository: sl()),
   );
+  sl.registerLazySingleton(
+    () => ImportTracksUseCase(repository: sl()),
+  );
   //bloc
   sl.registerLazySingleton(
     () => SpotSwapBloc(
@@ -89,6 +93,7 @@ Future<void> init() async {
       getMyTracksUseCase: sl(),
       exportTracksUseCase: sl(),
       loadMyTracksUseCase: sl(),
+      importTracksUseCase: sl(),
     ),
   );
 }

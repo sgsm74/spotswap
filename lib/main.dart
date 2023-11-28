@@ -96,8 +96,8 @@ class _MyHomePageState extends State<MyHomePage> {
             builder: (context, state) {
               if (state is SpotSwapLoadingState) {
                 return const Center(
-                  child: CircularProgressIndicator(
-                    color: Color(0xff20D761),
+                  child: CircularProgressIndicator.adaptive(
+                    backgroundColor: Color(0xff20D761),
                   ),
                 );
               }
