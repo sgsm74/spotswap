@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotswap/domain/entities/profile_entity.dart';
 import 'package:spotswap/domain/entities/track_entity.dart';
+import 'package:spotswap/main.dart';
 import 'package:spotswap/presentation/bloc/spotswap_bloc.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,9 +18,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Track> tracks = [];
+  List<Track> loadedTracks = [];
   @override
   void initState() {
     BlocProvider.of<SpotSwapBloc>(context).add(GetMyTracksEvent());
+    BlocProvider.of<SpotSwapBloc>(context)
+        .add(LoadMyTracksEvent(account: widget.profile.id));
     super.initState();
   }
 
@@ -34,8 +39,29 @@ class _HomePageState extends State<HomePage> {
             } else if (state is ExportMyTracksSuccessfulState) {
               showAdaptiveDialog(
                 context: context,
-                builder: (context) => const AlertDialog.adaptive(),
+                builder: (context) => AlertDialog.adaptive(
+                  title: const Text('Success'),
+                  content: const Text(
+                    'For import these songs, please hit the below button and login to your spotify account',
+                  ),
+                  actions: [
+                    adaptiveAction(
+                      context: context,
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MyApp(),
+                          ),
+                        );
+                      },
+                      child: const Text('Login'),
+                    ),
+                  ],
+                ),
               );
+            } else if (state is LoadMyTracksSuccessfulState) {
+              loadedTracks = state.tracks;
             }
           },
           builder: (context, state) {
@@ -98,21 +124,22 @@ class _HomePageState extends State<HomePage> {
                     spacing: 4,
                     children: [
                       Visibility(
-                        visible: state is GetMyTracksSuccessfulState,
-                        replacement: const SizedBox(
+                        visible: state is SpotSwapLoadingState &&
+                            state.event is GetMyTracksEvent,
+                        replacement: Text(
+                          '${tracks.length}',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        child: const SizedBox(
                           width: 10,
                           height: 10,
                           child: Center(
                             child: CircularProgressIndicator(
                               color: Color(0xff20D761),
                             ),
-                          ),
-                        ),
-                        child: Text(
-                          '${tracks.length}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -183,5 +210,23 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  Widget adaptiveAction({
+    required BuildContext context,
+    required VoidCallback onPressed,
+    required Widget child,
+  }) {
+    final ThemeData theme = Theme.of(context);
+    switch (theme.platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        return TextButton(onPressed: onPressed, child: child);
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        return CupertinoDialogAction(onPressed: onPressed, child: child);
+    }
   }
 }

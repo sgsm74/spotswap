@@ -6,6 +6,7 @@ abstract class LocalDatasource {
   Future<void> saveToken(Token token);
   Future<Token> getToken();
   Future<void> saveMyTracks(List<Track> tracks, String account);
+  Future<List<Track>> loadMyTracks(String account);
 }
 
 class LocalDatasourceImpl implements LocalDatasource {
@@ -25,8 +26,21 @@ class LocalDatasourceImpl implements LocalDatasource {
 
   @override
   Future<void> saveMyTracks(List<Track> tracks, String account) async {
-    final box = await Hive.openBox<List<Track>>('myTracks');
-    await box.put(account, tracks);
+    print('object');
+    await Hive.deleteBoxFromDisk('myTracks');
+    final box = await Hive.openBox('myTracks');
+    for (final track in tracks) {
+      await box.add(track);
+    }
     await box.close();
+  }
+
+  @override
+  Future<List<Track>> loadMyTracks(String account) async {
+    final box = await Hive.openBox('myTracks');
+    final list = box.values.toList();
+    await box.close();
+    print(list.runtimeType);
+    return list as List<Track>;
   }
 }

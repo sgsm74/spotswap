@@ -58,3 +58,11 @@ class GetMyTracksSuccessfulState extends SpotSwapState {
 }
 
 class ExportMyTracksSuccessfulState extends SpotSwapState {}
+
+class LoadMyTracksSuccessfulState extends SpotSwapState {
+  const LoadMyTracksSuccessfulState({required this.tracks});
+  final List<Track> tracks;
+
+  @override
+  List<Object> get props => [tracks];
+}

@@ -98,7 +98,18 @@ class RepositoryImpl implements Repository {
       await localDatasource.saveMyTracks(tracks, account);
       return const Right(unit);
     } catch (e) {
-      return const Left(DbFailure(message: 'sd'));
+      return const Left(DbFailure(message: 'Hive Exception'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Track>>> loadMyTracks(String account) async {
+    try {
+      final list = await localDatasource.loadMyTracks(account);
+      return Right(list);
+    } catch (e) {
+      print(e);
+      return const Left(DbFailure(message: 'Hive Exception'));
     }
   }
 }

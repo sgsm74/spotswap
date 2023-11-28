@@ -38,3 +38,13 @@ class ExportMyTracksEvent extends SpotSwapEvent {
   @override
   List<Object> get props => [account, tracks];
 }
+
+class LoadMyTracksEvent extends SpotSwapEvent {
+  const LoadMyTracksEvent({
+    required this.account,
+  });
+  final String account;
+
+  @override
+  List<Object> get props => [account];
+}

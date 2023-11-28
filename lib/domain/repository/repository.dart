@@ -14,4 +14,5 @@ abstract class Repository {
     List<Track> tracks,
     String account,
   );
+  Future<Either<Failure, List<Track>>> loadMyTracks(String account);
 }

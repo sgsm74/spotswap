@@ -12,6 +12,7 @@ import 'package:spotswap/domain/usecases/export_tracks_usecase.dart';
 import 'package:spotswap/domain/usecases/get_my_tracks_usecase.dart';
 import 'package:spotswap/domain/usecases/get_profile_usecase.dart';
 import 'package:spotswap/domain/usecases/get_user_playlists_usecase.dart';
+import 'package:spotswap/domain/usecases/load_my_tracks_usecase.dart';
 
 part 'spotswap_event.dart';
 part 'spotswap_state.dart';
@@ -23,6 +24,7 @@ class SpotSwapBloc extends Bloc<SpotSwapEvent, SpotSwapState> {
     required this.getUserPlayListsUseCase,
     required this.getMyTracksUseCase,
     required this.exportTracksUseCase,
+    required this.loadMyTracksUseCase,
   }) : super(SpotSwapInitialState()) {
     on<SpotSwapEvent>((event, emit) async {
       if (event is AuthenticationEvent) {
@@ -35,6 +37,8 @@ class SpotSwapBloc extends Bloc<SpotSwapEvent, SpotSwapState> {
         await _onGetMyTracksEvent(event, emit);
       } else if (event is ExportMyTracksEvent) {
         await _onExportMyTracksEvent(event, emit);
+      } else if (event is LoadMyTracksEvent) {
+        await _onLoadMyTracksEvent(event, emit);
       }
     });
   }
@@ -43,6 +47,7 @@ class SpotSwapBloc extends Bloc<SpotSwapEvent, SpotSwapState> {
   final GetUserPlayListsUseCase getUserPlayListsUseCase;
   final GetMyTracksUseCase getMyTracksUseCase;
   final ExportTracksUseCase exportTracksUseCase;
+  final LoadMyTracksUseCase loadMyTracksUseCase;
   FutureOr<void> _onAuthenticationEvent(
     AuthenticationEvent event,
     Emitter<SpotSwapState> emit,
@@ -112,6 +117,22 @@ class SpotSwapBloc extends Bloc<SpotSwapEvent, SpotSwapState> {
       result.fold(
         (error) => SpotSwapErrorState(message: error.message),
         (ok) => ExportMyTracksSuccessfulState(),
+      ),
+    );
+  }
+
+  FutureOr<void> _onLoadMyTracksEvent(
+    LoadMyTracksEvent event,
+    Emitter<SpotSwapState> emit,
+  ) async {
+    emit(SpotSwapLoadingState(event: event));
+    final result = await loadMyTracksUseCase(
+      event.account,
+    );
+    emit(
+      result.fold(
+        (error) => SpotSwapErrorState(message: error.message),
+        (tracks) => LoadMyTracksSuccessfulState(tracks: tracks),
       ),
     );
   }
